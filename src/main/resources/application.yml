@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: kanban-api
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/kanban}
+    username: ${SPRING_DATASOURCE_USERNAME:kanban}
+    password: ${SPRING_DATASOURCE_PASSWORD:kanban}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 3000
