@@ -11,7 +11,16 @@ import com.example.kanban_api.security.CurrentUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-// Profil et droits, 404 si l'id n'existe pas, 403 si ce n'est ni soi ni un admin, 403 si un non-admin touche au role
+/**
+ * Service profil utilisateur.
+ *
+ * Règles de droits :
+ * - voir /me : soi-même
+ * - modifier un user : soi-même OU admin
+ * - changer le rôle : admin uniquement
+ *
+ * 404 si id inconnu, 403 si pas le droit.
+ */
 @Service
 public class UserService {
 
@@ -21,6 +30,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /** Profil de l'utilisateur connecté (CurrentUser.id = id du JWT). */
     public UserResponse me() {
         return toResponse(findOrThrow(CurrentUser.id()));
     }
@@ -29,12 +39,15 @@ public class UserService {
     public UserResponse update(Long id, UpdateUserRequest request) {
         User user = findOrThrow(id);
         boolean self = user.getId().equals(CurrentUser.id());
+        // Ni soi ni admin → 403
         if (!self && !CurrentUser.isAdmin()) {
             throw new ForbiddenException();
         }
+        // Seul un admin peut toucher au rôle
         if (request.getRole() != null && !CurrentUser.isAdmin()) {
             throw new ForbiddenException();
         }
+        // Mise à jour partielle (PATCH) : on ne change que les champs envoyés
         if (request.getName() != null) {
             if (request.getName().isBlank()) {
                 throw new InvalidPayloadException("name", "name est obligatoire");
@@ -57,6 +70,7 @@ public class UserService {
     }
 
     private User findOrThrow(Long id) {
+        // orElseThrow = si Optional vide → exception (comme findOrFail)
         return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 

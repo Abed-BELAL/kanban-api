@@ -3,7 +3,10 @@ package com.example.kanban_api.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-// Champs optionnels de PATCH /api/cards/{id}, listId déplace la carte vers une autre liste
+/**
+ * Corps de PATCH /api/cards/{id} (tous les champs optionnels).
+ * listId = déplacer la carte vers une autre colonne.
+ */
 @Getter
 @Setter
 public class UpdateCardRequest {

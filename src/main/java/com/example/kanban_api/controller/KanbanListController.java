@@ -18,7 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-// Point d'entrée HTTP des listes, 201 à la création, 204 à la suppression
+/**
+ * Controller des listes Kanban (colonnes du board).
+ *
+ * Pattern classique CRUD :
+ * GET    /api/lists      → mes listes
+ * POST   /api/lists      → créer (201)
+ * PATCH  /api/lists/{id} → modifier
+ * DELETE /api/lists/{id} → supprimer (204 No Content)
+ *
+ * Même idée qu'un ResourceController Symfony ou un Controller Nest.
+ * La logique métier est dans KanbanListService (pas ici).
+ */
 @RestController
 @RequestMapping("/api/lists")
 public class KanbanListController {

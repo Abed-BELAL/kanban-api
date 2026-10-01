@@ -17,7 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-// Routes cartes, celles préfixées par /api/lists/{listId} vérifient d'abord que la liste m'appartient
+/**
+ * Controller des cartes (tickets du Kanban).
+ *
+ * Routes imbriquées sous une liste :
+ * GET/POST /api/lists/{listId}/cards
+ * et routes directes :
+ * GET/PATCH/DELETE /api/cards/{id}
+ *
+ * Avant toute action, le service vérifie que la liste appartient au user connecté.
+ */
 @RestController
 public class CardController {
 

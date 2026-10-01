@@ -6,7 +6,10 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-// Réponse publique, aucun champ password : le hash ne peut pas sortir par cette classe
+/**
+ * Réponse publique d'un user.
+ * Aucun champ password : le hash ne peut jamais sortir via cette classe.
+ */
 @Getter
 @Setter
 public class UserResponse {

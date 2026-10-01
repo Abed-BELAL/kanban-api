@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
-// Champs optionnels de PATCH /api/users/{id}, role n'est modifiable que par un admin
+/**
+ * Corps de PATCH /api/users/{id} (champs optionnels).
+ * Le rôle n'est modifiable que par un admin (vérifié dans UserService).
+ */
 @Getter
 @Setter
 public class UpdateUserRequest {

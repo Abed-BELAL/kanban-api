@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-// Corps de POST /api/lists/{listId}/cards description et position sont optionnelles
+/** Corps de POST /api/lists/{listId}/cards. Seul le titre est obligatoire. */
 @Getter
 @Setter
 public class CreateCardRequest {

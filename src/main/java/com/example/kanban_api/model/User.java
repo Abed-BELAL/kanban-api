@@ -14,7 +14,17 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-// Table users, le mot de passe stocké est le hash BCrypt, jamais renvoyé par l'API
+/**
+ * Entité User = table "users" en BDD.
+ *
+ * Équivalents :
+ * - Symfony : Entity Doctrine (@ORM\Entity)
+ * - NestJS : Entity TypeORM (@Entity())
+ *
+ * @Entity = classe liée à une table
+ * @Getter/@Setter = Lombok génère les get/set (évite le boilerplate)
+ * Le mot de passe stocké est un hash BCrypt, jamais renvoyé par l'API.
+ */
 @Entity
 @Table(name = "users")
 @Getter
@@ -22,25 +32,26 @@ import java.time.Instant;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private String password; // hash, pas le mot de passe en clair
 
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // stocke "user" / "admin" en texte
     @Column(nullable = false)
     private Role role;
 
     @Column(nullable = false)
     private Instant createdAt;
 
+    /** Avant le premier INSERT, on pose la date de création automatiquement. */
     @PrePersist
     void onCreate() {
         createdAt = Instant.now();

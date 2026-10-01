@@ -1,10 +1,10 @@
 package com.example.kanban_api.dto;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-// JSON accepté à la création Pas d'id qui lui est généré en bdd
-// @NotBlank utile pour refuser un titre vide avant d'entrer dans le service
+/** Corps de POST /api/lists. L'id est généré en BDD, pas envoyé par le client. */
 @Getter
 @Setter
 public class KanbanListRequest {

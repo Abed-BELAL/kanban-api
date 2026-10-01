@@ -11,7 +11,10 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-// Table kanban_list, ownerId est l'auteur : seul lui peut modifier ou supprimer
+/**
+ * Entité Liste Kanban (= une colonne du board : "À faire", "En cours"...).
+ * ownerId = id de l'auteur : seul lui peut lire / modifier / supprimer.
+ */
 @Entity
 @Getter
 @Setter
@@ -23,9 +26,9 @@ public class KanbanList {
 
     private String title;
 
-    private Integer position;
+    private Integer position; // ordre d'affichage
 
-    private Long ownerId;
+    private Long ownerId; // auteur de la liste
 
     private Instant createdAt;
 

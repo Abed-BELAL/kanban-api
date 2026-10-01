@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-// Réponse carte pas d'entité JPA exposée
+/** JSON renvoyé pour une carte. On n'expose jamais l'entité JPA brute. */
 @Getter
 @Setter
 public class CardResponse {

@@ -3,7 +3,7 @@ package com.example.kanban_api.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-// Réponse de POST /api/auth/login /un seul champ : le JWT
+/** Réponse du login : uniquement le JWT (accessToken). */
 @Getter
 @Setter
 public class AuthTokenResponse {

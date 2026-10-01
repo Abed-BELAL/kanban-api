@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-// deleteByListId retire les cartes quand leur liste est supprimée
+/**
+ * Accès BDD aux cartes.
+ * deleteByListId = utile quand on supprime une liste (cascade manuelle).
+ */
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findByListId(Long listId);

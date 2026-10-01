@@ -5,7 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-// Spring Data fournit save et findById, l'email sert à l'inscription et au login
+/**
+ * Accès BDD aux users.
+ *
+ * Équivalents :
+ * - Symfony : UserRepository (Doctrine)
+ * - NestJS : UserRepository / TypeORM Repository
+ *
+ * JpaRepository donne déjà save, findById, deleteById, etc.
+ * On ajoute juste les méthodes custom : Spring génère le SQL
+ * à partir du nom (findByEmail → WHERE email = ?).
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);

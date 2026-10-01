@@ -12,7 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-// Les droits viennent de la liste parente, déplacer une carte exige d'être auteur de la liste cible
+/**
+ * Service des cartes.
+ *
+ * Une carte n'a pas d'auteur propre : les droits viennent de la liste parente.
+ * Pour déplacer une carte (changer listId), il faut aussi être auteur de la liste cible.
+ */
 @Service
 public class CardService {
 
@@ -25,7 +30,7 @@ public class CardService {
     }
 
     public List<CardResponse> findByList(Long listId) {
-        kanbanListService.ownedOrThrow(listId);
+        kanbanListService.ownedOrThrow(listId); // droits sur la liste
         return cardRepository.findByListId(listId).stream().map(this::toResponse).toList();
     }
 
@@ -46,6 +51,7 @@ public class CardService {
     @Transactional
     public CardResponse update(Long id, UpdateCardRequest request) {
         Card card = ownedCard(id);
+        // PATCH partiel : on ne met à jour que ce qui est envoyé (≠ null)
         if (request.getTitle() != null) {
             if (request.getTitle().isBlank()) {
                 throw new InvalidPayloadException("title", "titre vide");
@@ -58,6 +64,7 @@ public class CardService {
         if (request.getPosition() != null) {
             card.setPosition(request.getPosition());
         }
+        // Déplacement vers une autre liste : on vérifie aussi cette liste
         if (request.getListId() != null) {
             kanbanListService.ownedOrThrow(request.getListId());
             card.setListId(request.getListId());
@@ -66,10 +73,11 @@ public class CardService {
     }
 
     public void delete(Long id) {
-        ownedCard(id);
+        ownedCard(id); // vérifie les droits avant de supprimer
         cardRepository.deleteById(id);
     }
 
+    /** Charge la carte + vérifie que sa liste appartient au user. */
     private Card ownedCard(Long id) {
         Card card = cardRepository.findById(id).orElseThrow(NotFoundException::new);
         kanbanListService.ownedOrThrow(card.getListId());

@@ -12,3 +12,13 @@ spring:
 
 server:
   port: 3000
+
+springdoc:
+  swagger-ui:
+    path: /api
+
+app:
+  jwt:
+    # HS256 exige une clé d'au moins 32 octets, surchargeable par JWT_SECRET
+    secret: ${JWT_SECRET:kanban-dev-jwt-secret-key-32b-min!!}
+    expiration: 1h

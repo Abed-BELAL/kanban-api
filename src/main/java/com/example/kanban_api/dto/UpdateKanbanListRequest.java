@@ -3,7 +3,7 @@ package com.example.kanban_api.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-// Champs optionnels de PATCH /api/lists/{id}, un titre vide est refusé dans le service
+/** Corps de PATCH /api/lists/{id}. Champs optionnels (mise à jour partielle). */
 @Getter
 @Setter
 public class UpdateKanbanListRequest {

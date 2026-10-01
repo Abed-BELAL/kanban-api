@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// GET /api/users/me et PATCH /api/users/{id} Le token est exigé par la sécurité, pas par ce controller
+/**
+ * Controller utilisateurs.
+ *
+ * Équivalents : UserController Symfony / NestJS.
+ * Le token JWT est exigé par Spring Security (pas dans ce fichier).
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -22,11 +27,17 @@ public class UserController {
         this.userService = userService;
     }
 
+    /** GET /api/users/me → profil de l'utilisateur connecté */
     @GetMapping("/me")
     public UserResponse me() {
         return userService.me();
     }
 
+    /**
+     * PATCH /api/users/{id} → modifier un user.
+     * {id} est récupéré via @PathVariable (= $id dans Symfony, @Param Nest).
+     * Droits vérifiés dans le service (soi-même ou admin).
+     */
     @PatchMapping("/{id}")
     public UserResponse update(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         return userService.update(id, request);

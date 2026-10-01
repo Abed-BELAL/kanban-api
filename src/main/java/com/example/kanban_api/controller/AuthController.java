@@ -13,23 +13,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// Routes publiques, 201 à l'inscription et 200 au login @Valid s'applique uniquement à l'inscription
+/**
+ * Controller d'authentification (= routes HTTP).
+ *
+ * Équivalents :
+ * - Symfony : AuthController + #[Route]
+ * - NestJS : AuthController + @Controller('auth')
+ *
+ * @RestController = renvoie du JSON automatiquement
+ * @RequestMapping = préfixe commun des routes (/api/auth)
+ *
+ * Ces routes sont PUBLIQUES (voir SecurityConfiguration).
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    // Injection par constructeur (= autowire Symfony / constructor DI Nest)
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
+    /** POST /api/auth/register → crée un compte (201 Created) */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
+        // @Valid = vérifie les contraintes du DTO (@Email, @NotBlank...)
+        // @RequestBody = lit le JSON du body (comme Request en Symfony)
         return authService.register(request);
     }
 
+    /** POST /api/auth/login → renvoie un JWT (200 OK) */
     @PostMapping("/login")
     public AuthTokenResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);

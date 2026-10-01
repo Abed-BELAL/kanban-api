@@ -12,7 +12,11 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-// La carte n'a pas d'auteur propre : les droits sont ceux de la liste parente (listId)
+/**
+ * Entité Carte (= un ticket dans une colonne).
+ * Pas d'auteur propre : les droits viennent de la liste (listId).
+ * @PreUpdate met à jour updatedAt à chaque modification.
+ */
 @Entity
 @Getter
 @Setter
@@ -30,7 +34,7 @@ public class Card {
     private Integer position;
 
     @Column(nullable = false)
-    private Long listId;
+    private Long listId; // colonne parente
 
     @Column(nullable = false)
     private Instant createdAt;

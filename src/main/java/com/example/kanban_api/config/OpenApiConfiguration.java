@@ -10,7 +10,15 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-// Déclare le bouton Authorize de Swagger, ce n'est pas la sécurité réelle : elle est dans SecurityConfiguration
+/**
+ * Config Swagger / OpenAPI (doc interactive sur /api).
+ *
+ * Équivalents : NelmioApiDoc (Symfony), @nestjs/swagger (NestJS).
+ *
+ * Attention : le bouton "Authorize" de Swagger n'est PAS la sécurité réelle.
+ * La vraie sécurité est dans SecurityConfiguration + JwtAuthenticationFilter.
+ * Ici on dit juste à Swagger : "envoie le JWT dans Authorization: Bearer".
+ */
 @Configuration
 public class OpenApiConfiguration {
 
@@ -25,6 +33,7 @@ public class OpenApiConfiguration {
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
     }
 
+    /** Register / login n'ont pas besoin de token → on enlève le cadenas Swagger. */
     @Bean
     public OpenApiCustomizer publicAuthRoutes() {
         return openApi -> openApi.getPaths().forEach((path, item) -> {

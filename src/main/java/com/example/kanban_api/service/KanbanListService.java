@@ -15,7 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-// Une liste n'est visible et modifiable que par son auteur, id inconnu : 404, autre auteur : 403
+/**
+ * Service des listes Kanban (colonnes).
+ *
+ * Règle forte : une liste n'appartient qu'à son auteur (ownerId).
+ * - id inconnu → 404
+ * - liste d'un autre user → 403
+ *
+ * ownedOrThrow() est aussi utilisé par CardService pour vérifier les droits.
+ */
 @Service
 public class KanbanListService {
 
@@ -27,6 +35,7 @@ public class KanbanListService {
         this.cardRepository = cardRepository;
     }
 
+    /** Liste uniquement les colonnes du user connecté. */
     public List<KanbanListResponse> findMine() {
         return repository.findByOwnerId(CurrentUser.id()).stream().map(this::toResponse).toList();
     }
@@ -35,7 +44,7 @@ public class KanbanListService {
         KanbanList list = new KanbanList();
         list.setTitle(request.getTitle());
         list.setPosition(request.getPosition());
-        list.setOwnerId(CurrentUser.id());
+        list.setOwnerId(CurrentUser.id()); // on force l'auteur = user connecté
         return toResponse(repository.save(list));
     }
 
@@ -54,13 +63,21 @@ public class KanbanListService {
         return toResponse(repository.save(list));
     }
 
+    /**
+     * Supprime une liste ET ses cartes (cascade manuelle).
+     * Transaction = si une étape échoue, rien n'est gardé.
+     */
     @Transactional
     public void delete(Long id) {
         ownedOrThrow(id);
-        cardRepository.deleteByListId(id);
-        repository.deleteById(id);
+        cardRepository.deleteByListId(id); // d'abord les cartes
+        repository.deleteById(id);         // puis la liste
     }
 
+    /**
+     * Vérifie que la liste existe ET appartient au user connecté.
+     * Méthode publique car réutilisée par CardService.
+     */
     public KanbanList ownedOrThrow(Long id) {
         KanbanList list = repository.findById(id).orElseThrow(NotFoundException::new);
         if (!list.getOwnerId().equals(CurrentUser.id())) {

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 
-// JSON renvoyé au client, l'entité n'est pas sérialisée
+/** JSON renvoyé pour une liste. On n'expose jamais l'entité JPA brute. */
 @Getter
 @Setter
 public class KanbanListResponse {
