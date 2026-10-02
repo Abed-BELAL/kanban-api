@@ -6,7 +6,7 @@ API REST pour une application de Kanban Board (utilisateurs, listes, cartes), r�
 
 - Java 25
 - Spring Boot 4.1.1 (Web, Data JPA, Security, Validation)
-- PostgreSQL 16 (H2 en mémoire pour les tests)
+- PostgreSQL 16
 - Spring Security OAuth2 JOSE (JWT stateless, HS256)
 - springdoc-openapi (documentation Swagger)
 - Lombok
@@ -118,15 +118,6 @@ Toutes les routes sont préfixées par `/api`.
 - **Suppression en cascade** : supprimer une liste (`DELETE /api/lists/{id}`) supprime aussi toutes ses cartes. Il n'y a pas de refus si la liste n'est pas vide.
 - **Changement de rôle réservé aux admins** : un utilisateur qui tente de modifier son propre champ `role` via `PATCH /api/users/{id}` reçoit 403, même sur son propre profil. Seul un compte `admin` peut changer le rôle d'un utilisateur.
 - **Mot de passe jamais exposé** : aucune réponse API (register, login, users/me, PATCH users) ne renvoie le champ `password`, en clair ou haché.
-
-## Tests
-
-```bash
-./mvnw test      # Linux / macOS
-mvnw.cmd test    # Windows
-```
-
-Les tests tournent sur une base H2 en mémoire (profil `test`, voir `application-test.yml`) et couvrent, pour chaque route, le cas nominal et les cas d'erreur (400/401/403/404/409), avec deux utilisateurs distincts pour vérifier systématiquement les 403 de propriété.
 
 ## Documentation de veille
 

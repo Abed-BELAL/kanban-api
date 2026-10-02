@@ -46,7 +46,7 @@ public class AuthController {
     }
 
     /** POST /api/auth/login → renvoie un JWT (200 OK) */
-    @PostMapping("/login")
+    @PostMapping("/login")  
     public AuthTokenResponse login(@RequestBody LoginRequest request) {
         return authService.login(request);
     }

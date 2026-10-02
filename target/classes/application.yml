@@ -1,24 +1,35 @@
+# Fichier de config de l'app (= .env + config/packages/*.yaml en Symfony,
+# ou ConfigModule + .env en NestJS).
 spring:
   application:
     name: kanban-api
   datasource:
+    # Connexion PostgreSQL (= DATABASE_URL). Les ${...} permettent de
+    # surcharger la valeur avec une variable d'environnement.
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/kanban}
     username: ${SPRING_DATASOURCE_USERNAME:kanban}
     password: ${SPRING_DATASOURCE_PASSWORD:kanban}
   jpa:
     hibernate:
+      # update = Hibernate crée/modifie les tables tout seul au démarrage
+      # (proche des migrations Doctrine / TypeORM en mode "sync", pratique en dev)
       ddl-auto: update
+    # Affiche les requêtes SQL dans la console (utile pour comprendre JPA)
     show-sql: true
 
 server:
+  # Port du serveur (= 8000 en Symfony, souvent 3000 en NestJS)
   port: 3000
 
 springdoc:
   swagger-ui:
+    # Doc interactive de l'API (= NelmioApiDoc / Swagger Module Nest)
     path: /api
 
 app:
   jwt:
-    # HS256 exige une clé d'au moins 32 octets, surchargeable par JWT_SECRET
+    # Clé secrète pour signer les tokens JWT (comme JWT_SECRET)
+    # HS256 exige au moins 32 caractères
     secret: ${JWT_SECRET:kanban-dev-jwt-secret-key-32b-min!!}
+    # Durée de vie du token (= 1 heure)
     expiration: 1h
